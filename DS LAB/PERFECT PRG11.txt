@@ -1,0 +1,159 @@
+#include<stdio.h>
+#include<alloc.h>
+#include<stdlib.h>
+#define SIZE 5
+struct node
+{
+int info;
+struct node *llink;
+struct node *rlink;
+};
+typedef struct node *NODE;
+
+NODE getnode()
+{
+NODE x;
+x=(NODE)malloc(sizeof(struct node));
+if(x==NULL)
+{
+printf("OUT OF MEMORY\n");
+exit(0);
+}
+return x;
+}
+
+NODE insfront(int item,NODE first)
+{
+NODE temp=getnode();
+temp->info=item;
+temp->llink=temp->rlink=NULL;
+if(first==NULL) return temp;
+temp->rlink=first;
+first->llink=temp;
+return temp;
+}
+
+NODE delfront(NODE first)
+{
+NODE sec;
+if(first==NULL)
+{
+printf("LIST EMPTY\n");
+return NULL;
+}
+if(first->rlink==NULL)
+{
+printf("%d",first->info);
+free(first);
+return NULL;
+}
+
+sec=first->rlink;
+sec->llink=NULL;
+printf("%d",first->info);
+free(first);
+return sec;
+}
+
+NODE delrear(NODE first)
+{
+NODE prev,curr;
+if(first==NULL)
+{
+printf("LIST EMPTY\n");
+return NULL;
+}
+if(first->rlink==NULL)
+{
+printf("%d",first->info);
+free(first);
+return NULL;
+}
+prev=NULL;
+curr=first;
+while(curr->rlink!=NULL)
+{
+prev=curr;
+curr=curr->rlink;
+}
+printf("ITEM DELETED IS %d",curr->info);
+free(curr);
+prev->rlink=NULL;
+return first;
+}
+
+NODE delnthpos(NODE first,int pos)
+{
+NODE prev1,curr1;
+if(first==NULL)
+{
+printf("LIST IS EMPTY\n");
+return NULL;
+}
+else
+{
+prev1=NULL;
+curr1=first;
+int i;
+for(i=1;i<pos;i++)
+{
+prev1=curr1;
+curr1=curr1->rlink;
+}
+printf("ITEM DELETED IS %d",curr1->info);
+prev1->rlink=curr1->rlink;
+free(curr1);
+ return first;
+}
+}
+
+void display(NODE first)
+{
+NODE curr;
+if(first==NULL)
+{
+printf("LIST EMPTY\n");
+}
+curr=first;
+while(curr!=NULL)
+{
+printf("%d",curr->info);
+curr=curr->rlink;
+}
+}
+
+void main()
+{
+NODE first;
+int ch,item,pos;
+first=NULL;
+do
+{
+printf("1.INS FRONT 2.DELNTHPOS 3.DISPLAY 4.EXIT\n");
+scanf("%d",&ch);
+switch(ch)
+{
+case 1: printf("ENTER ITEM\n");
+scanf("%d",&item);
+first=insfront(item,first);
+break;
+
+case 2: printf("ENTER pos\n");
+scanf("%d",&pos);
+if(pos==1)
+first=delfront(first);
+else
+if(pos==SIZE-1)
+first=delrear(first);
+else
+first=delnthpos(first,pos);
+break;
+
+case 3: display(first);
+break;
+
+case 4:exit(0);
+}
+}while(ch<=4);
+}
+

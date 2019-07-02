@@ -1,0 +1,114 @@
+#include<stdio.h>
+#include<alloc.h>
+#include<stdlib.h>
+struct node
+{
+int info;
+struct node *link;
+};
+typedef struct node *NODE;
+NODE getnode()
+{
+NODE x;
+x=(NODE)malloc(sizeof(struct node));
+if(x==NULL)
+{
+printf("OUT OF MEMORY\n");
+exit(0);
+}
+
+return x;
+}
+
+NODE insfront(int item,NODE first)
+{
+NODE temp=getnode();
+temp->info=item;
+temp->link=first;
+return temp;
+}
+
+void display(NODE first)
+{
+NODE curr;
+if(first==NULL)
+{
+printf("EMPTY LIST\n");
+
+}
+curr=first;
+
+while(curr!=NULL)
+{
+printf("%d",curr->info);
+curr=curr->link;
+}
+}
+
+void delnthnode(NODE first,int pos)
+{
+NODE prev,curr,temp;
+if(first==NULL)
+{
+printf("LIST IS EMPTY\n");
+}
+prev=NULL;
+curr=first;
+int i=1;
+while((curr->link!=NULL)&&(i!=pos))
+{
+i++;
+prev=curr;
+curr=curr->link;
+}
+if(prev==NULL)
+{
+if(pos==1)
+{
+temp=first;
+first=first->link;
+printf("NODE DELETED IS %d",curr->info);
+free(temp);
+
+}
+printf("INVALID POSITION\n");
+}
+if(i!=pos) printf("INVALID\n");
+else
+{
+prev->link=curr->link;
+printf("ITEM DELETED IS %d",curr->info);
+free(curr);
+
+}
+}
+
+void main()
+{
+NODE first;
+int ch,item,pos;
+first=NULL;
+do
+{
+printf("1.INS FRONT 2.DELNTHPOS 3.DISPLAY 4.EXIT\n");
+scanf("%d",&ch);
+switch(ch)
+{
+case 1: printf("ENTER ELEMENT\n");
+scanf("%d",&item);
+first=insfront(item,first);
+break;
+
+case 2: printf("ENTER POS\n");
+scanf("%d",&pos);
+delnthnode(first,pos);
+break;
+
+case 3: display(first);
+break;
+
+case 4:exit(0);
+}
+}while(ch<=4);
+}
+

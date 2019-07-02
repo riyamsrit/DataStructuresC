@@ -1,0 +1,119 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<ctype.h>
+#include<string.h>
+#define stacksize 50
+
+struct stack
+{
+int top;
+char items[stacksize];
+};
+typedef struct stack STACK;
+
+void push(STACK *s,char ele)
+{
+if(s->top==stacksize-1)
+{
+printf("STACK FULL");
+exit(0);
+}
+else
+s->items[++(s->top)]=ele;
+}
+
+int empty(STACK *s)
+{
+return(s->top==-1);
+}
+
+char pop(STACK *s)
+{
+return (s->items[(s->top)--]);
+}
+
+int priority(char op)
+{
+switch(op)
+{
+
+case '(':return (0);
+case '+':return (1);
+case '-':return (1);
+case '*':return (2);
+case '/':return (2);
+case '^':return (3);
+case '$':return (3);
+default: printf("WRONG OPTION");
+exit(0);
+}
+}
+
+int check(char op1,char op2)
+{
+if(op1=='^')
+return(1);
+else
+return(priority(op1)>priority(op2));
+}
+
+void infixtopostfix(char infix[],char postfix[])
+{
+char symb,topsymb;
+STACK op;
+op.top=-1;
+int i=0,j=0;
+while((symb=infix[i++])!='\0')
+{
+if(symb=='(')
+push(&op,symb);
+else
+if(isalpha(symb))
+postfix[j++]=symb;
+else
+if(symb==')')
+{
+if(empty(&op))
+{
+printf("INVALID");
+exit(0);
+}
+topsymb=pop(&op);
+while(topsymb!='(')
+{
+postfix[j++]=topsymb;
+if(empty(&op))
+{
+printf("INVALID");
+exit(0);
+}
+topsymb=pop(&op);
+}
+}
+
+else
+{
+while(!empty(&op)&& !(check(symb,op.items[op.top])) )
+{
+postfix[j++]=pop(&op);
+}
+push(&op,symb);
+}
+}
+while(!empty(&op))
+postfix[j++]=pop(&op);
+postfix[j]='\0';
+}
+
+void main()
+{
+
+char infix[1000],postfix[1000];
+STACK op;
+printf("ENTER INFIX EXPRESSION\n");
+scanf("%s",infix);
+infixtopostfix(infix,postfix);
+puts(postfix);
+
+
+}

@@ -1,0 +1,95 @@
+#include<stdio.h>
+#include<alloc.h>
+#include<stdlib.h>
+#define SIZE 5
+struct node
+{
+int info;
+struct node *llink;
+struct node *rlink;
+};
+typedef struct node *NODE;
+
+NODE getnode()
+{
+NODE x;
+x=(NODE)malloc(sizeof(struct node));
+if(x==NULL)
+{
+printf("OUT OF MEMORY\n");
+exit(0);
+}
+return x;
+}
+
+
+NODE insert(int item,NODE root)
+{
+ NODE prev,curr;
+NODE temp=getnode();
+temp->info=item;
+temp->llink=temp->rlink=NULL;
+if(root==NULL) return temp;
+prev=NULL;
+curr=root;
+while(curr!=NULL)
+{
+prev=curr;
+if(item==curr->info)
+{
+printf("NO DUPES ALLOWED\n");
+free(temp);
+return root;
+}
+if(item<curr->info)
+curr=curr->llink;
+else
+curr=curr->rlink;
+
+}
+if(item<prev->info)
+prev->llink=temp;
+else
+prev->rlink=temp;
+return root;
+
+}
+
+
+void display(NODE root,int level)
+{
+int i;
+if(root==NULL)
+{
+
+return;
+}
+display(root->rlink,level+1);
+for(i=0;i<level;i++) printf(" ");
+printf("%d\n",root->info);
+display(root->llink,level+1);
+}
+void main()
+{
+NODE root;
+int ch,item;
+root=NULL;
+do
+{
+printf("1.INSERT  2.DISPLAY 3.EXIT\n");
+scanf("%d",&ch);
+switch(ch)
+{
+case 1: printf("ENTER ITEM\n");
+scanf("%d",&item);
+root=insert(item,root);
+break;
+
+case 2: display(root,1);
+break;
+
+case 3:exit(0);
+}
+}while(ch<=3);
+}
+

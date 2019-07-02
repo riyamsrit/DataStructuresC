@@ -1,0 +1,84 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 5
+struct queue
+{
+int front;
+int rear;
+int items[MAX];
+};
+typedef struct queue Q;
+
+int isfull(Q *q)
+{
+return(q->rear==MAX-1);
+}
+int isempty(Q *q)
+{
+return((q->front)>(q->rear));
+}
+
+void qinsert(int ele, Q*q)
+{
+if(isfull(q))
+printf("QUEUE OVERFLOW\n");
+else
+q->items[(++q->rear)]=ele;
+}
+
+int qdelete(Q*q)
+{
+if(isempty(q))
+{
+printf("QUEUE IS EMPTY\n");
+return 0;
+}
+else
+return(q->items[(q->front)++]);
+}
+
+
+
+void display(Q q)
+{
+int i;
+if(q.front>q.rear)
+printf("QUEUE EMPTY\n");
+else
+{
+for(i=q.front;i<=q.rear;i++)
+{
+printf("%d",q.items[i]);
+}
+}
+}
+
+void main()
+{
+Q q;
+q.front=0;
+q.rear=-1;
+int ch,ele;
+do
+{
+printf("1.INSERT 2.DELETE 3.DISPLAY 4.EXIT\n");
+scanf("%d",&ch);
+switch(ch)
+{
+case 1:printf("ENTER ELE\n");
+scanf("%d",&ele);
+qinsert(ele,&q);
+break;
+
+case 2:ele=qdelete(&q) ;
+printf("ITEM DELETED IS %d",ele);
+break;
+
+case 3:display(q);
+break;
+case 4: exit(0);
+}
+}while(ch<=4);
+}
+
+
